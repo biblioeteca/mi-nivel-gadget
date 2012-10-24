@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs 
+    title="Estoy Leyendo"
+    author="Jose Antonio Espinosa"
+    description="Muestra los libros que estás leyendo"
+    author_email="espinosa@biblioeteca.com" 
+    scrolling="true"
+    thumbnail="http://www.biblioeteca.com/gadgets/thumb.gif"
+    height="250"/> 
+  <UserPref name="usuario" 
+    display_name="Usuario" 
+    datatype="string" 
+    required = "true"/>
+  <Content type="html">
+  <![CDATA[ 
+  
+  <div id=content_div></div>
+
+  <script type="text/javascript"> 
+	function stristr (haystack, needle, bool) {
+	    var pos = 0;
+	 
+	    haystack += '';
+	    pos = haystack.toLowerCase().indexOf( (needle+'').toLowerCase() );
+	    if (pos == -1){
+		return false;
+	    } else{
+		if (bool) {
+		    return haystack.substr( 0, pos );
+		} else{
+		    return haystack.slice( pos );
+		}
+	    }
+	}
+
+	function getHtml1(url) {    
+	  var params = {};  
+	  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.TEXT;  
+	  gadgets.io.makeRequest(url, response, params);
+	};
+
+	function response(obj) {  
+	 var sourc = obj.text;
+
+	 if (sourc.indexOf("img")!=-1) {
+		html+=sourc;
+		document.getElementById('content_div').innerHTML = html;
+	 } else {
+		html+="<br/>";
+		html+="<p>En este momento no estoy leyendo nada</p>";
+		html+="<br/>";
+		html+="<a href='http://www.biblioeteca.com'>www.biblioEteca.com</a>";
+		document.getElementById('content_div').innerHTML = html;
+	}
+	}
+
+	function getContent () {
+	      var url = servidor+"/biblioeteca.web/widgets/imreading/"+usuario;
+	      getHtml1(url);
+	}
+    // Get userprefs
+    var prefs = new gadgets.Prefs();
+
+    // Get the array of search terms entered by the user
+    var usuario = prefs.getString("usuario");
+    var servidor = "http://www.biblioeteca.com";
+    var titulo = unescape(prefs.getString("titulo"));
+
+    var html = "<h3>"+titulo+"</h3>";
+
+    if (usuario=="")
+    {
+      html += "Edita las preferencias para poder usar el gadget.";
+    }
+    else {
+	gadgets.util.registerOnLoadHandler(getContent);
+    }
+  </script>
+
+  ]]> 
+  </Content>
+</Module>
