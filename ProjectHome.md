@@ -1,0 +1,1 @@
+Gadget para obtener el nivel de usuario en biblioeteca mediante la presentación de trofeos, puntos y el nivel gráfico mediante dragotecario
